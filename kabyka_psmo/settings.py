@@ -26,7 +26,8 @@ if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+#SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = 'django-insecure-6m9j9jwcs7ubdhy0s1zlxnnpl!o8=@35uuak&mg1=&cc9-2@g#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,12 +84,12 @@ WSGI_APPLICATION = 'kabyka_psmo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ['ENGINE'],
-        'NAME': os.environ['NAME'],           # Database name
-        'USER': os.environ['USER'],         # Database user
-        'PASSWORD': os.environ['PASSWORD'], # User's password
-        'HOST': os.environ['HOST'],      # Database host, e.g., 'localhost' or IP address
-        'PORT': os.environ['PORT'],           # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.postgresql',  # Example engine
+        'NAME': 'kabyka',  # Replace with actual database name
+        'USER': 'sabith_user',  # Replace with actual database user
+        'PASSWORD': '49984998',  # Replace with actual database password
+        'HOST': 'localhost',  # Replace with actual host
+        'PORT': '5432',  # Replace with actual port (default PostgreSQL port)
     }
 }
 
