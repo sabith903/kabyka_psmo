@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Points Table - College Arts Festival{% endblock %}
+
+{% block content %}
+<div class="space-y-8 p-4">
+    <!-- Header Section -->
+    <div class="text-center mb-10 animate-slideUp">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">Festival Leaderboard</h1>
+        <p class="text-gray-600 mt-2">Track department and individual achievements</p>
+    </div>
+
+    <!-- Department Points Card -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 animate-slideUp">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+            <h2 class="text-3xl font-bold text-gray-800">Department Rankings</h2>
+            <div class="bg-purple-100 rounded-full px-4 py-2">
+                <span class="text-purple-600 font-semibold">Total Departments: {{ departments|length }}</span>
+            </div>
+        </div>
+        
+        <div class="overflow-x-auto -mx-6">
+            <table class="min-w-full">
+                <thead class="bg-purple-50">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Rank</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Department</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Points</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for department in departments %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            {% if forloop.counter == 1 %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                    🏆 1st
+                                </span>
+                            {% elif forloop.counter == 2 %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                                    🥈 2nd
+                                </span>
+                            {% elif forloop.counter == 3 %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
+                                    🥉 3rd
+                                </span>
+                            {% else %}
+                                {{ forloop.counter }}
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 font-medium">{{ department.name }}</td>
+                        <td class="px-6 py-4 font-semibold text-purple-600">{{ department.total_points }}</td>
+                        <td class="px-6 py-4">
+                            {% if forloop.counter == 1 %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Leading
+                                </span>
+                            {% else %}
+                                {% with points_diff=departments.0.total_points|add:"-"|add:department.total_points %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    {{ points_diff }} points behind
+                                </span>
+                                {% endwith %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Performers Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        {% for category, students in top_students_by_category.items %}
+        <div class="bg-white rounded-2xl shadow-lg p-6 animate-slideUp">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">{{ category.name }}</h3>
+            <div class="space-y-4">
+                {% for student_data in students %}
+                <div class="relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-700">{{ student_data.student.name }}</span>
+                        <span class="text-sm font-semibold text-purple-600">{{ student_data.points_in_category }} pts</span>
+                    </div>
+                    <div class="overflow-hidden h-2 text-xs flex rounded-full bg-purple-50">
+                        <div style="width:{{ student_data.points_in_category }}%" 
+                             class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500 transition-all duration-500">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Analytics Section -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mt-8 animate-slideUp">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Competition Analytics</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="text-4xl font-bold text-purple-600 mb-2">
+                    {{ total_participants|default:"0" }}
+                </div>
+                <div class="text-sm text-gray-600">Total Participants</div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="text-4xl font-bold text-green-600 mb-2">
+                    {{ total_events|default:"0" }}
+                </div>
+                <div class="text-sm text-gray-600">Events Completed</div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="text-4xl font-bold text-pink-600 mb-2">
+                    {{ total_points|default:"0" }}
+                </div>
+                <div class="text-sm text-gray-600">Total Points Awarded</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation classes to elements as they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        });
+
+        // Observe all major sections
+        document.querySelectorAll('.bg-white').forEach((el) => {
+            el.classList.add('opacity-0', 'translate-y-4', 'transition-all', 'duration-500');
+            observer.observe(el);
+        });
+    });
+</script>
+{% endblock %}
+
