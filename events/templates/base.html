@@ -6,6 +6,10 @@
     <title>College Arts Fest - {% block title %}{% endblock %}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Add this in your head section -->
+    <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+    <!-- OR for Chilanka font -->
+    <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100 pb-16"> <!-- Added padding bottom for sticky nav -->
     <!-- Top Header -->
@@ -14,15 +18,18 @@
             <div class="flex justify-between items-center h-16">
                 <div>
                     <a href="{% url 'home' %}" class="flex items-center">
-                        <span class="font-semibold text-xl text-gray-800">KABYKA 2025</span>
+                        <span class="font-semibold text-xl text-gray-800" style="font-family: 'Manjari', sans-serif;">കാബൈക 2025</span>
+                        <!-- OR for Chilanka font -->
+                        <!-- <span class="font-semibold text-xl text-gray-800" style="font-family: 'Chilanka', cursive;">കാബൈക 2025</span> -->
                     </a>
                 </div>
                 <div>
-                    <!-- You can add header icons or buttons here if needed -->
-                    <button class="p-2 rounded-full hover:bg-gray-100">
-                        <i class="fas fa-bell text-gray-600"></i>
-                    </button>
-                </div>
+                    <a href="{% url 'news' %}">
+                        <button class="p-2 rounded-full hover:bg-gray-100">
+                            <i class="fas fa-bell text-gray-600"></i>
+                        </button>
+                    </a>
+                </div>                
             </div>
         </div>
     </header>
