@@ -28,7 +28,8 @@ class Category(models.Model):
 
 class Result(models.Model):
     program = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
+    group = models.BooleanField(default=False)  # New field to indicate group or individual results
     first_place = models.ManyToManyField(Student, related_name='first_place', blank=True)
     second_place = models.ManyToManyField(Student, related_name='second_place', blank=True)
     third_place = models.ManyToManyField(Student, related_name='third_place', blank=True)
@@ -37,27 +38,29 @@ class Result(models.Model):
         return f"{self.program} - Results"
 
 
+# Signal Handlers
 @receiver(m2m_changed, sender=Result.first_place.through)
 def update_first_place_points(sender, instance, action, reverse, pk_set, **kwargs):
     if action in ["post_add", "post_remove"]:
-        points = 10
+        points = 10 if instance.group else 5  # Adjust points based on group
         adjust_points(instance, pk_set, points, reverse)
 
 
 @receiver(m2m_changed, sender=Result.second_place.through)
 def update_second_place_points(sender, instance, action, reverse, pk_set, **kwargs):
     if action in ["post_add", "post_remove"]:
-        points = 7
+        points = 6 if instance.group else 3  # Adjust points based on group
         adjust_points(instance, pk_set, points, reverse)
 
 
 @receiver(m2m_changed, sender=Result.third_place.through)
 def update_third_place_points(sender, instance, action, reverse, pk_set, **kwargs):
     if action in ["post_add", "post_remove"]:
-        points = 3
+        points = 2 if instance.group else 1  # Adjust points based on group
         adjust_points(instance, pk_set, points, reverse)
 
 
+# Helper Function
 def adjust_points(result_instance, student_ids, points, reverse):
     """Adjust points for students and their departments."""
     for student_id in student_ids:
@@ -66,10 +69,12 @@ def adjust_points(result_instance, student_ids, points, reverse):
             department = student.department
 
             if reverse:  # Removing points
-                student.individual_score -= points
+                if not result_instance.group:  # Only update individual score if not a group
+                    student.individual_score -= points
                 department.total_points -= points
             else:  # Adding points
-                student.individual_score += points
+                if not result_instance.group:  # Only update individual score if not a group
+                    student.individual_score += points
                 department.total_points += points
 
             student.save()
@@ -92,3 +97,10 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"{self.title} - Schedule"
+    
+class Posters(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='E-Posters/')
+
+    def __str__(self):
+        return f"{self.title} - E-Posters"

@@ -30,10 +30,10 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = 'django-insecure-6m9j9jwcs7ubdhy0s1zlxnnpl!o8=@35uuak&mg1=&cc9-2@g#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['kabyka.art']
+#'kabyka.art'
 
 # Application definition
 
