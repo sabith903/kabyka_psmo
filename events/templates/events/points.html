@@ -6,7 +6,7 @@
 <div class="space-y-8 p-4">
     <!-- Header Section -->
     <div class="text-center mb-10 animate-slideUp">
-        <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">Festival Leaderboard</h1>
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text">Leaderboard</h1>
         <p class="text-gray-600 mt-2">Track department and individual achievements</p>
     </div>
 
@@ -20,45 +20,60 @@
         </div>
     
         <div class="overflow-x-auto -mx-6">
-            <table class="min-w-full">
+            <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-purple-50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Rank</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Department</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Points</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-purple-600">Status</th>
+                        <th class="px-4 sm:px-6 py-4 text-left text-sm font-semibold text-purple-600">Rank</th>
+                        <th class="px-4 sm:px-6 py-4 text-left text-sm font-semibold text-purple-600">Department</th>
+                        <th class="px-4 sm:px-6 py-4 text-left text-sm font-semibold text-purple-600">Points</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     {% for department in departments %}
                     <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 text-sm font-medium">
-                            <span class="inline-flex items-center justify-center w-8 h-8 ">
-                                {% if forloop.counter == 1 %}
-                                    1st
-                                {% elif forloop.counter == 2 %}
-                                    2nd
-                                {% elif forloop.counter == 3 %}
-                                    3rd
+                        <td class="px-4 sm:px-6 py-4">
+                            <div class="flex items-center space-x-2">
+                                {% if forloop.counter <= 3 %}
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative 
+                                        {% if forloop.counter == 1 %}
+                                            bg-gradient-to-br from-yellow-100 to-yellow-200 shadow-yellow-100
+                                        {% elif forloop.counter == 2 %}
+                                            bg-gradient-to-br from-gray-100 to-gray-200 shadow-gray-100
+                                        {% else %}
+                                            bg-gradient-to-br from-orange-100 to-orange-200 shadow-orange-100
+                                        {% endif %}
+                                        shadow-lg">
+                                        <span class="text-base sm:text-lg font-bold 
+                                            {% if forloop.counter == 1 %}
+                                                text-yellow-800
+                                            {% elif forloop.counter == 2 %}
+                                                text-gray-800
+                                            {% else %}
+                                                text-orange-800
+                                            {% endif %}">
+                                            {% if forloop.counter == 1 %}🏆{% endif %}
+                                            {% if forloop.counter == 2 %}🥈{% endif %}
+                                            {% if forloop.counter == 3 %}🥉{% endif %}
+                                        </span>
+                                    </div>
                                 {% else %}
-                                    {{ forloop.counter }}
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center bg-purple-50 text-purple-600 font-bold text-base sm:text-lg">
+                                        {{ forloop.counter }}
+                                    </div>
                                 {% endif %}
-                            </span>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 font-medium">{{ department.name }}</td>
-                        <td class="px-6 py-4 font-semibold text-purple-600">{{ department.total_points }}</td>
-                        <td class="px-6 py-4">
-                            {% if forloop.counter == 1 %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Leading
-                                </span>
-                            {% else %}
-                                {% with points_diff=departments.0.total_points|add:"-"|add:department.total_points %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    {{ points_diff }} points behind
-                                </span>
-                                {% endwith %}
-                            {% endif %}
+                        <td class="px-4 sm:px-6 py-4">
+                            <div class="flex flex-col">
+                                <span class="font-semibold text-gray-900">{{ department.name }}</span>
+                                {% if forloop.counter == 1 %}
+                                    <span class="text-xs text-green-600 font-medium mt-1">Leading</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-4 sm:px-6 py-4">
+                            <span class="text-lg font-bold text-purple-600">{{ department.total_points }}</span>
+                            <span class="text-sm text-purple-400">pts</span>
                         </td>
                     </tr>
                     {% endfor %}
