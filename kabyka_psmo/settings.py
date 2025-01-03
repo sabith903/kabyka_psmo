@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-6m9j9jwcs7ubdhy0s1zlxnnpl!o8=@35uuak&mg1=&cc9-2@g#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['kabyka.art']
+ALLOWED_HOSTS = ['kabyka.art', 'www.kabyka.art', '16.171.146.42']
 #'kabyka.art'
 
 # Application definition
@@ -129,7 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
