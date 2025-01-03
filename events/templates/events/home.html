@@ -6,15 +6,13 @@
 <div class="min-h-screen p-4 sm:p-6 lg:p-8">
     <div class="max-w-6xl mx-auto">
         <!-- Main image container -->
-        {% for image in images %}
         <div class="relative rounded-lg overflow-hidden shadow-xl mb-8 sm:mb-12">
             <img 
-                src="{{ image.image.url }}" 
+                src="/media/images/logo.jpg" 
                 alt="{{ image.title }}" 
                 class="w-full h-[200px] sm:h-[300px] lg:h-[400px] object-cover object-center"
             >
         </div>
-        {% endfor %}
 
         <!-- Quick links -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
