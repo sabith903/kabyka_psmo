@@ -32,8 +32,8 @@ SECRET_KEY = 'django-insecure-6m9j9jwcs7ubdhy0s1zlxnnpl!o8=@35uuak&mg1=&cc9-2@g#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['kabyka.art', 'www.kabyka.art', '16.171.146.42']
-#'kabyka.art'
+ALLOWED_HOSTS = ['kabyka.art', 'www.kabyka.art']
+#'kabyka.art', 'www.kabyka.art'
 
 # Application definition
 
@@ -86,8 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # Example engine
         'NAME': 'kabyka',  # Replace with actual database name
-        'USER': 'sabith_user',  # Replace with actual database user
-        'PASSWORD': '49984998',  # Replace with actual database password
+        'USER': 'postgres',  # Replace with actual database user
+        'PASSWORD': 'postgres',  # Replace with actual database password
         'HOST': 'localhost',  # Replace with actual host
         'PORT': '5432',  # Replace with actual port (default PostgreSQL port)
     }
@@ -133,6 +133,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
