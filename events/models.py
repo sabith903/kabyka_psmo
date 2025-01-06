@@ -3,7 +3,7 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
 class Department(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     total_points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -20,14 +20,14 @@ class Student(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
 
 class Result(models.Model):
-    program = models.CharField(max_length=100)
+    program = models.CharField(max_length=100, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     group = models.BooleanField(default=False)  # New field to indicate group or individual results
     first_place = models.ManyToManyField(Student, related_name='first_place', blank=True)
@@ -70,8 +70,8 @@ def adjust_points(result_instance, student_ids, points, reverse):
 
             if reverse:  # Removing points
                 if not result_instance.group:  # Only update individual score if not a group
-                    student.individual_score -= points
-                department.total_points -= points
+                    student.individual_score = max(0, student.individual_score - points)
+                department.total_points = max(0, department.total_points - points)
             else:  # Adding points
                 if not result_instance.group:  # Only update individual score if not a group
                     student.individual_score += points
@@ -81,6 +81,7 @@ def adjust_points(result_instance, student_ids, points, reverse):
             department.save()
         except Student.DoesNotExist:
             pass
+
 
             
 

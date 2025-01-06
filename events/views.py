@@ -22,6 +22,9 @@ def result_detail(request, result_id):
     result = get_object_or_404(Result, id=result_id)
     return render(request, 'events/result_detail.html', {'result': result})
 
+
+from collections import defaultdict
+
 def points_table(request):
     departments = Department.objects.all().order_by('-total_points')
     top_students_by_category = {}
@@ -31,27 +34,24 @@ def points_table(request):
         # Get all the results for this category
         results = Result.objects.filter(category=category)
 
-        # Create a list of students with their points in this specific category
-        students_with_points = []
+        # Dictionary to store aggregated points for each student
+        student_points = defaultdict(int)
 
         for result in results:
             # Only include individual points if the result is not a group
             if not result.group:
                 for student in result.first_place.all():
-                    students_with_points.append({
-                        'student': student,
-                        'points_in_category': 5
-                    })
+                    student_points[student.id] += 5
                 for student in result.second_place.all():
-                    students_with_points.append({
-                        'student': student,
-                        'points_in_category': 3
-                    })
+                    student_points[student.id] += 3
                 for student in result.third_place.all():
-                    students_with_points.append({
-                        'student': student,
-                        'points_in_category': 1
-                    })
+                    student_points[student.id] += 1
+
+        # Convert the dictionary into a list of student objects with points
+        students_with_points = [
+            {'student': Student.objects.get(id=student_id), 'points_in_category': points}
+            for student_id, points in student_points.items()
+        ]
 
         # Sort students by points in this category (descending order)
         students_with_points = sorted(students_with_points, key=lambda x: x['points_in_category'], reverse=True)[:5]
