@@ -70,8 +70,8 @@ def adjust_points(result_instance, student_ids, points, reverse):
 
             if reverse:  # Removing points
                 if not result_instance.group:  # Only update individual score if not a group
-                    student.individual_score -= points
-                department.total_points -= points
+                    student.individual_score = max(0, student.individual_score - points)
+                department.total_points = max(0, department.total_points - points)
             else:  # Adding points
                 if not result_instance.group:  # Only update individual score if not a group
                     student.individual_score += points
@@ -81,6 +81,7 @@ def adjust_points(result_instance, student_ids, points, reverse):
             department.save()
         except Student.DoesNotExist:
             pass
+
 
             
 
